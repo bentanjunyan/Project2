@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<ul>
+    <li>Username: <%= user.username %></li>
+    <li>Email: <%= user.email %></li>
+</ul>
+
+<div>
+<form action ="/postroute"  method="POST">
+<label> Enter name here</label>
+<select>
+<option value = "entry1"> Display Name 1 </option>
+<option value = "entry2"> Display Name 2 </option>
+<option value = "entry3"> Display Name 3 </option>
+<option value = "entry4"> Display Name 4 </option>
+</select>
+<input type="submit" value="Submit" />
+</form>
+</div>
+<br>
+<div>display user's child here</div>
+
+<div>
+<form action="/user/:id/addchild">
+    <input type="submit" value="Add" />
+</form>
+
+<form action="/user/:id/editchild">
+    <input type="submit" value="Edit" />
+</form>
+
+<form action="/user/:id/delchild">
+    <input type="submit" value="Delete" />
+</form>
+</div>
+<br>
+
+<form action="/login">
+    <input type="submit" value="Logout" />
+</form>
+
+</body>
+</html>

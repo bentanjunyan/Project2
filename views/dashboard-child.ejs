@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+<br>
+<div>display child current selected status here</div>
+<br>
+
+<div>
+<form action ="/postroute"  method="POST">
+<label> Enter name here</label>
+<select>
+<option value = "entry1"> Display Name 1 </option>
+<option value = "entry2"> Display Name 2 </option>
+<option value = "entry3"> Display Name 3 </option>
+<option value = "entry4"> Display Name 4 </option>
+</select>
+<input type="submit" value="Submit" />
+</form>
+</div>
+<br>
+
+
+Display events for child on this day
+
+<div>
+<form action="/user/:id/:child/addevent">
+    <input type="submit" value="Add" />
+</form>
+
+<form action="/user/:id/:child/editevent">
+    <input type="submit" value="Edit" />
+</form>
+
+<form action="/user/:id/:child/delevent">
+    <input type="submit" value="Delete" />
+</form>
+</div>
+<br>
+
+Display all users that are linked to child here + status
+
+<br>
+<form action="/user/:id">
+    <input type="submit" value="User Dashboard" />
+</form>
+
+<form action="/signup">
+    <input type="submit" value="Logout" />
+</form>
+  
+</body>
+</html>

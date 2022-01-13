@@ -2,6 +2,8 @@ import express from 'express'
 import pg from 'pg'
 import session from 'express-session'
 import FileStore from 'session-file-store'
+import e from 'express';
+
 
 const app = express();
 const {Pool} = pg
@@ -45,12 +47,20 @@ app.post('/login', async (req,res)=>{
   } else if (results.rows[0].password === req.body.password)  {
     req.session.username = req.body.username;
     req.session.userid = results.rows[0].id;    
-    res.send("Login Success")
-    // res.redirect('/user') why does code break when i try to redirect / async issue ? 
+    res.redirect('/userloggingin')
 
   } else {
     res.send('Login Failed.')
   }
+})
+
+//USERLOGGINGIN ROUTE ====================================================
+app.get ('/userloggingin', (req,res)=>{
+  res.render('login2')
+})
+
+app.post ('/userloggingin', (req,res)=>{
+  res.redirect('/user')
 })
 
 //LOGOUT ROUTE ===========================================================
@@ -73,7 +83,7 @@ app.post('/signup', async (req,res)=>{
   res.send("Account Successfully Created. Please Login.")  
 })
 
-// USER DASHBOARD ROUTE ===================================================='continue here later'
+// USER DASHBOARD ROUTE ====================================================
 app.get('/user', async (req,res)=>{
 
   if (req.session.userid === "") {
@@ -81,17 +91,27 @@ app.get('/user', async (req,res)=>{
     return;
   } 
 
-  let values = [req.session.userid];
-  let results = await pool.query('SELECT * FROM users WHERE id = $1', values)
+  let sessionUserId = [req.session.userid]; 
+  
+  let results = await pool.query(
+    'SELECT u.name, u.username, u.email, u.status, c.id, c.name AS child_name, c.dob, c.gender, c.status AS child_status, c.activity FROM children AS c JOIN users AS u ON u.id = c.user_id WHERE u.id =$1', sessionUserId
+    ) 
 
-  // res.send(results.rows[0])
+  console.log(results.rows)
+
   res.render('dashboard-user', {
-    'user': results.rows[0]
+    'userdata': results.rows    
   })
 })
 
-// USER DASHBOARD: ADD CHILD ===========================
-app.get('/user/addchild', (req,res)=>{
+app.post('/user', async (req,res)=>{     
+  let userStatus = [req.body.status]
+  await pool.query('UPDATE users SET status = $1', userStatus)
+  res.redirect('/user')
+})
+
+// USER DASHBOARD: ADD CHILD ===============================================
+app.get('/addchild', (req,res)=>{
   if (! req.session.userid ) {
     res.redirect('/login');
     return;
@@ -101,83 +121,133 @@ app.get('/user/addchild', (req,res)=>{
 
 app.post('/user/addchild', async(req,res)=>{
  
-let userId = req.session.userid;
+  let userId = req.session.userid;
 
-let values = [req.body.name, req.body.dob, req.body.gender, userId]
+  let values = [req.body.name, req.body.dob, req.body.gender, userId]
 
-await pool.query(`INSERT INTO children (name, dob, gender, status, activity, user_id) VALUES ($1,$2,$3,'free','rest',$4)`, values)
+  await pool.query(`INSERT INTO children (name, dob, gender, status, activity, user_id) VALUES ($1,$2,$3,'free','rest',$4)`, values)
 
- res.redirect('/user') // can i skip render and enter redirect? page only render after i click submit
- //res.redirect('')
+  res.redirect('/user') 
 })
 
 // USER DASHBOARD: EDIT CHILD ==========================
-app.get('/child/:childid/edit', (req,res)=>{
+app.get('/editChild/:id', (req,res)=>{
+  if (! req.session.userid ) {
+    res.redirect('/login');
+    return;
+  }
  res.render('form-edit-child')
 })
 
-app.put('/user/:id/editchild', (req,res)=>{
+app.post('/editChild/:id', async(req,res)=>{
   console.log(req.body)
- res.render('dashboard-user') 
+
+  let childId = req.params.id
+  console.log(req.params.id)
+
+  let values = [req.body.name, req.body.dob, req.body.gender, childId]
+
+  await pool.query(' UPDATE children SET name = $1, dob = $2, gender = $3 WHERE id = $4', values)
+
+  res.redirect('/user') 
 })
 
 // USER DASHBOARD: DEL CHILD =============================
 
-app.get('/user/:id/delchild', (req,res)=>{
- res.render('form-del-child')
+app.get('/delchild/:id', (req,res)=>{
+  res.render('form-del-child')
 })
 
-app.delete('/user/:id/delchild', (req,res)=>{
- res.render('dashboard-user')
+app.post('/delchild/:id', async(req,res)=>{
+ let childId = [req.params.id]
+ await pool.query("DELETE FROM children WHERE id = $1", childId);
+ res.redirect('/user')
 })
 
-// CHILD DASHBOARD =======================================
+// CHILD DASHBOARD ROUTE=======================================
 
-app.get('/user/:id/:child', (req,res)=>{
- res.render('dashboard-child')
+app.get('/child/:id', async(req,res)=>{
+
+  if (req.session.userid === "") {
+    res.redirect("/login");
+    return;
+  } 
+
+  let sessionUserId = [req.session.userid, req.params.id]; 
+  let childID = [req.params.id];
+
+  let userQueryResults = await pool.query(
+    'SELECT u.name, u.username, u.email, u.status, c.id, c.name AS child_name, c.dob, c.gender, c.status AS child_status, c.activity FROM children AS c JOIN users AS u ON u.id = c.user_id WHERE u.id =$1 AND c.id =$2', sessionUserId) 
+
+    
+
+  let eventQueryResults = await pool.query(
+    'SELECT e.id AS event_id, e.date, e.description, e.child_id, c.id FROM events AS e JOIN children AS c ON e.child_id = c.id WHERE c.id = $1',childID)   
+
+    console.log(eventQueryResults.rows[0])
+
+  res.render('dashboard-child', {
+    'userdata': userQueryResults.rows,    
+    'eventdata': eventQueryResults.rows   
+  })
 })
 
-// CHILD DASHBOARD: EDIT PICKUP ===========================
-
-app.get('/user/:id/:child/editpickup', (req,res)=>{
- res.render('form-edit-pickup')
-}) 
-
-app.put('/user/:id/:child/editpickup', (req,res)=>{
-  console.log(req.body)
- res.render('dashboard-child')
+app.post('/child/:id', async (req,res)=>{ 
+  let childId = req.params.id   
+  let values = [req.body.status, childId]
+  await pool.query('UPDATE children SET status = $1 WHERE id= $2', values)  
+  
+  res.redirect('/user')
 })
 
 // CHILD DASHBOARD: ADD EVENT  =============================
 
-app.get('/user/:id/:child/addevent', (req,res)=>{
+app.get('/child/addevent/:id', (req,res)=>{
  res.render('form-add-event')
 }) 
 
-app.post('/user/:id/:child/addevent', (req,res)=>{
+app.post('/child/addevent/:id', async(req,res)=>{
   console.log(req.body)
- res.render('dashboard-child') 
+  console.log(req.params)
+
+  let childID = req.params.id
+  let values = [req.body.date, req.body.description, childID]
+
+  await pool.query('INSERT INTO events (date, description, child_id) VALUES ($1,$2,$3)', values)
+
+ res.redirect('/user') 
 })
+
+
 
 // CHILD DASHBOARD: EDIT EVENT  =============================
 
-app.get('/user/:id/:child/editevent', (req,res)=>{
+app.get('/child/editevent/:eventid', (req,res)=>{
  res.render('form-edit-event')
 })
 
-app.put('/user/:id/:child/editevent', (req,res)=>{
+app.post('/child/editevent/:eventid', async(req,res)=>{
   console.log(req.body)
- res.render('dashboard-child')
+  console.log(req.params)
+
+  let eventID = req.params.eventid
+  let values = [req.body.date, req.body.description, eventID]
+
+  await pool.query('UPDATE events SET date= $1, description= $2 WHERE id= $3', values)
+
+ res.redirect('/user') 
 })
 
 // CHILD DASHBOARD: DEL EVENT  =============================
 
-app.get('/user/:id/:child/delevent', (req,res)=>{
+app.get('/child/delevent/:eventid', (req,res)=>{
  res.render('form-del-event')
 })
 
-app.delete('/user/:id/:child/delevent', (req,res)=>{
- res.render('dashboard-child')
+app.post('/child/delevent/:eventid', async (req,res)=>{
+ let eventId = [req.params.eventid]
+ await pool.query("DELETE FROM events WHERE id = $1", eventId);
+ res.redirect('/user')
 }) 
 
 // END =====================================================
@@ -210,3 +280,13 @@ app.listen(3004);
 //   await pool.query("DELETE FROM users WHERE id = $1", [req.params.id]);
 //   res.send("User has been deleted");
 // })
+
+
+// APP FEATURES
+
+// login - logout
+// c r u d - child
+// c r u d - checklist
+
+// status parents
+// status child

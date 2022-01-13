@@ -1,51 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>User Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+    <div class="container">
+
+        <div class="row">
+            
+            <div class="col-sm-4">
+                 One of three columnsq
+            </div>
+            
+            <div class="col-sm-4">
+                One of three columns
+            </div>
+            
+            <div class="col-sm-4">
+                One of three columns
+            </div>
+
+        </div>
+
+    </div>
   
-<ul>
-    <li>Username: <%= user.username %></li>
-    <li>Email: <%= user.email %></li>
-</ul>
+<div>
+    <h2>Hello Username: <%= userdata[0].username %>, Email: <%= userdata[0].email %></h2>
+<div>
+
+<div>My Status: <%=userdata[0].status%></div>
 
 <div>
-<form action ="/postroute"  method="POST">
-<label> Enter name here</label>
-<select>
-<option value = "entry1"> Display Name 1 </option>
-<option value = "entry2"> Display Name 2 </option>
-<option value = "entry3"> Display Name 3 </option>
-<option value = "entry4"> Display Name 4 </option>
-</select>
-<input type="submit" value="Submit" />
-</form>
+    <form method="POST">        
+       <label> Update Status </label>
+        <select name="status">
+         <option value= "Available" name= "status"> Available </option>
+         
+         <option value= "Busy" name= "status"> Busy </option>
+          
+         <option value= "Do Not Disturb" name= "status"> Do Not Disturb </option>
+         
+       </select>
+         <input type="submit" value="Submit" />
+    </form>
 </div>
+
 <br>
-<div>display user's child here</div>
 
 <div>
-<form action="/user/:id/addchild">
-    <input type="submit" value="Add" />
-</form>
+    
+<h1> My Children </h1> 
 
-<form action="/user/:id/editchild">
-    <input type="submit" value="Edit" />
-</form>
+    <form action="/user/addchild">
+        <input type="submit" value="Add" />
+    </form>
+    
+    <ul>
+      <% userdata.forEach((child) => {%>
+         <li>Name: <%= child.child_name %></li>   
+         <li>Status: <%= child.child_status %></li>  
 
-<form action="/user/:id/delchild">
-    <input type="submit" value="Delete" />
-</form>
+         <li>Activity: <%= child.activity %></li>           
+         <form action="/child/<%=child.id %>">
+            <input type="submit" value="Go" />
+        </form>
+
+        <form action="/editchild/<%=child.id %>">
+            <input type="submit" value="Edit" />
+        </form>
+
+        <form action="/delchild/<%=child.id %>">
+            <input type="submit" value="Delete" />
+        </form>
+        <br>
+      <% }); %>      
+      
+    </ul>
+</div>
+
+<div>
+
 </div>
 <br>
 
-<form action="/login">
+<form action="/logout">
     <input type="submit" value="Logout" />
 </form>
 
-</body>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
 </html>

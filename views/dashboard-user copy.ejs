@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<div>
+    <h2>Hello Username: <%= userdata[0].username %>, Email: <%= userdata[0].email %></h2>
+<div>
+
+<div>My Status: <%=userdata[0].status%></div>
+
+<div>
+    <form method="POST">        
+       <label> Update Status </label>
+        <select name="status">
+         <option value= "Available" name= "status"> Available </option>
+         
+         <option value= "Busy" name= "status"> Busy </option>
+          
+         <option value= "Do Not Disturb" name= "status"> Do Not Disturb </option>
+         
+       </select>
+         <input type="submit" value="Submit" />
+    </form>
+</div>
+
+<br>
+
+<div>
+    
+<h1> My Children </h1> 
+
+    <form action="/user/addchild">
+        <input type="submit" value="Add" />
+    </form>
+    
+    <ul>
+      <% userdata.forEach((child) => {%>
+         <li>Name: <%= child.child_name %></li>   
+         <li>Status: <%= child.child_status %></li>  
+
+         <li>Activity: <%= child.activity %></li>           
+         <form action="/child/<%=child.id %>">
+            <input type="submit" value="Go" />
+        </form>
+
+        <form action="/editchild/<%=child.id %>">
+            <input type="submit" value="Edit" />
+        </form>
+
+        <form action="/delchild/<%=child.id %>">
+            <input type="submit" value="Delete" />
+        </form>
+        <br>
+      <% }); %>      
+      
+    </ul>
+</div>
+
+<div>
+
+</div>
+<br>
+
+<form action="/logout">
+    <input type="submit" value="Logout" />
+</form>
+
+</body>
+</html>

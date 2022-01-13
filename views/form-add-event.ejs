@@ -8,15 +8,17 @@
 </head>
 <body>
 
-   <form action="/user/:id/:child/addevent" method="POST">
-      <label for="name">Date:</label><br />
-      <input type="text" id="date" name="date" /><br />
+    <form method="POST">     
 
-      <label for="username">Description:</label><br />
+      <label for="date">Date:</label><br />
+      <input type="date" id="date" name="date" /><br />
+
+      <label for="description">Description:</label><br />
       <input type="text" id="description" name="description" /><br />
 
       <input type="submit" value="Submit" />
- </form>  
+      
+    </form> 
   
 </body>
 </html>

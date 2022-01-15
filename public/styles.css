@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  justify-content: center;
+  width:310px;
+  height: 600px;
+  border: 5px soild black;
+  border-radius: 15px;
+  background-color: red;
+}
+
+.row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: aqua;
+}
+
+#other{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.user-profile-picture {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid white;
+}
+
+span.profile-name{
+  font-size:24px  
+}
+
+.booking{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  align-items: center;
+
+  background-color: yellow;
+  border-radius: 40px;
+}
+
+.mainbox{
+  background-color: green;
+  border-radius: 30px;
+
+}

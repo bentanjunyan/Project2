@@ -2,15 +2,16 @@ import express from 'express'
 import pg from 'pg'
 import session from 'express-session'
 import FileStore from 'session-file-store'
-import e from 'express';
-
 
 const app = express();
 const {Pool} = pg
 const createFileStore = FileStore(session);
 
 app.set('view engine', 'ejs'); //ejs
+app.use(express.static("public"));
+// app.use('*/css',express.static('public/css'));
 app.use(express.urlencoded({ extended: false })); // request.body
+
 
 // SETUP PG ============================================================
 const pgConfig = {
@@ -86,10 +87,10 @@ app.post('/signup', async (req,res)=>{
 // USER DASHBOARD ROUTE ====================================================
 app.get('/user', async (req,res)=>{
 
-  if (req.session.userid === "") {
-    res.redirect("/login");
-    return;
-  } 
+  // if (req.session.userid === "") {
+  //   res.redirect("/login");
+  //   return;
+  // } 
 
   let sessionUserId = [req.session.userid]; 
   

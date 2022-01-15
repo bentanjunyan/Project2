@@ -7,104 +7,145 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>User Dashboard</title>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap -->        
+    <!-- <link rel="stylesheet" href="/styles.css">   -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
+     <link rel="stylesheet" href="/styles.css"> 
+
     
-    <div class="container">
+   
+  </head>
+  
+  <body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+    <div class= "container">
 
-        <div class="row">
-            
-            <div class="col-sm-4">
-                 One of three columnsq
-            </div>
-            
-            <div class="col-sm-4">
-                One of three columns
-            </div>
-            
-            <div class="col-sm-4">
-                One of three columns
-            </div>
+      <div class="row align-items-start">
+    <div class="col">
+      One of three columns
+    </div>
+    <div class="col">
+      One of three columns
+    </div>
+    <div class="col">
+      One of three columns
+    </div>
+  </div>
+  <div class="row align-items-center">
+    <div class="col">
+      One of three columns
+    </div>
+    <div class="col">
+      One of three columns
+    </div>
+    <div class="col">
+      One of three columns
+    </div>
+  </div>
+
+      <!-- PROFILE PICTURE DIV ROW -->
+      <div class= "row" >
+        <div class="col-12">
+
+          <img class="user-profile-picture" src="https://picsum.photos/200">
+
+        </div> 
+      </div>
+
+      <!-- PROFILE NAME DIV ROW -->
+
+      <div class= "row" >
+        <div class="col-12">
+
+          <span class="profile-name">Name</span>       
+          <span class="profile-name-text">Registered Children</span>  
+
+        </div>  
+      </div>
+
+      <!-- PROFILE INFO DIV ROW -->
+      <div class= "row" >  
+        <div class="col-12">         
+
+          <div class="child">
+            <span class="name"> child </span>
+            <span class="status"> status </span>
+            <span class="activity"> activity </span>
+          </div>
+
+          <div class="child">
+            <span class="name"> child </span>
+            <span class="status"> status </span>
+            <span class="activity"> activity </span>
+          </div>         
 
         </div>
+      </div>
 
-    </div>
+    </div> <!-- end container -->
+    
+    
+    
+    <section>
+
+      <header>imnage</header>
+
+      <main>
+        main
+
+
+        <div class="children-section">
+
+          <h2>my children</h2>
+
+          <% userdata.forEach((child) => {%>
+            
+          <div class="children-entry"></div>
+
+            <div class="photo">
+              <img src="https://picsum.photos/100" alt="display picture">            
+            </div>
+
+            <div class="info">
+              <div class="name"><%= child.child_name %></div>
+              <div class="status"><%= child.child_status %></div>
+              <div class="activity"><%= child.activity %></div>
+            </div>
+
+           <% }); %>    
+
+        </div>
+      </main>
+
+    </section>
+
   
-<div>
-    <h2>Hello Username: <%= userdata[0].username %>, Email: <%= userdata[0].email %></h2>
-<div>
+  
 
-<div>My Status: <%=userdata[0].status%></div>
 
-<div>
-    <form method="POST">        
-       <label> Update Status </label>
-        <select name="status">
-         <option value= "Available" name= "status"> Available </option>
-         
-         <option value= "Busy" name= "status"> Busy </option>
-          
-         <option value= "Do Not Disturb" name= "status"> Do Not Disturb </option>
-         
-       </select>
-         <input type="submit" value="Submit" />
-    </form>
-</div>
 
-<br>
 
-<div>
-    
-<h1> My Children </h1> 
 
-    <form action="/user/addchild">
-        <input type="submit" value="Add" />
-    </form>
-    
-    <ul>
-      <% userdata.forEach((child) => {%>
-         <li>Name: <%= child.child_name %></li>   
-         <li>Status: <%= child.child_status %></li>  
 
-         <li>Activity: <%= child.activity %></li>           
-         <form action="/child/<%=child.id %>">
-            <input type="submit" value="Go" />
-        </form>
 
-        <form action="/editchild/<%=child.id %>">
-            <input type="submit" value="Edit" />
-        </form>
 
-        <form action="/delchild/<%=child.id %>">
-            <input type="submit" value="Delete" />
-        </form>
-        <br>
-      <% }); %>      
-      
-    </ul>
-</div>
 
-<div>
 
-</div>
-<br>
 
-<form action="/logout">
-    <input type="submit" value="Logout" />
-</form>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+
+
   </body>
 </html>

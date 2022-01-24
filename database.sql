@@ -4,7 +4,8 @@ CREATE TABLE users (
   username VARCHAR(255),
   password VARCHAR(255),
   email VARCHAR(255),
-  status VARCHAR(255)
+  status VARCHAR(255),
+  photo VARCHAR(255)
 );
 
 CREATE TABLE children (
@@ -24,7 +25,4 @@ CREATE TABLE events (
   child_id INT
 );
 
-
-
-INSERT INTO users (name, username, password, email, status) 
-VALUES ('john', 'john123', '12345', 'email@email.com', 'Available');
+INSERT INTO children (name, dob, gender, status, activity, user_id) VALUES ('test', '2022-01-04', 'M', 'test', 'test', 1);

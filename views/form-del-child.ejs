@@ -1,16 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Delete Child Profile</title>
+
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
 
-   <form method="POST">
-            <input type="submit" value="Confirm" />
-   </form>  
-  
+  <div class="container">
+
+    <div class="row user-dp-section">
+      <div>
+        <div class="col">
+          <img class="user-dp" src=https://cdn.dribbble.com/users/251873/screenshots/9288094/media/a1c2f89065f68e1b2b5dcb66bdb9beb1.gif />
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row child-section">
+      <div class="col">
+
+        <div class="form-title">
+          <p class="form-title-text">Delete Child Profile</p>
+        </div>
+
+        <br>
+
+        <div class="form-alert">
+          <div>
+            <form method="POST">
+              <p> Are you sure you want to delete this profile?</p>                          
+              <p> Any changes made will be irreversible. </p>   
+              <br>
+              <input type="submit" value="Confirm" />
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row menu">
+      <div class="col">
+        <form class="form-menu-items" action="/user">
+          <button type="submit" class="btn"><i class="fa fa-times"></i> Cancel </button>
+        </form>
+      </div>
+    </div>
+    
 </body>
+
 </html>

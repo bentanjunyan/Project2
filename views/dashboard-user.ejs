@@ -1,130 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
+
+<head>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>User Dashboard</title>
-
-    <!-- Bootstrap -->        
-    <!-- <link rel="stylesheet" href="/styles.css">   -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-     <link rel="stylesheet" href="/styles.css"> 
-
-    
-   
-  </head>
-  
-  <body>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    
-    <div class= "container">
-
-      <div class="row align-items-start">
-    <div class="col">
-      One of three columns
-    </div>
-    <div class="col">
-      One of three columns
-    </div>
-    <div class="col">
-      One of three columns
-    </div>
-  </div>
-  <div class="row align-items-center">
-    <div class="col">
-      One of three columns
-    </div>
-    <div class="col">
-      One of three columns
-    </div>
-    <div class="col">
-      One of three columns
-    </div>
-  </div>
-
-      <!-- PROFILE PICTURE DIV ROW -->
-      <div class= "row" >
-        <div class="col-12">
-
-          <img class="user-profile-picture" src="https://picsum.photos/200">
-
-        </div> 
-      </div>
-
-      <!-- PROFILE NAME DIV ROW -->
-
-      <div class= "row" >
-        <div class="col-12">
-
-          <span class="profile-name">Name</span>       
-          <span class="profile-name-text">Registered Children</span>  
-
-        </div>  
-      </div>
-
-      <!-- PROFILE INFO DIV ROW -->
-      <div class= "row" >  
-        <div class="col-12">         
-
-          <div class="child">
-            <span class="name"> child </span>
-            <span class="status"> status </span>
-            <span class="activity"> activity </span>
-          </div>
-
-          <div class="child">
-            <span class="name"> child </span>
-            <span class="status"> status </span>
-            <span class="activity"> activity </span>
-          </div>         
-
-        </div>
-      </div>
-
-    </div> <!-- end container -->
-    
-    
-    
-    <section>
-
-      <header>imnage</header>
-
-      <main>
-        main
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
 
-        <div class="children-section">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-          <h2>my children</h2>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-          <% userdata.forEach((child) => {%>
-            
-          <div class="children-entry"></div>
+    <link rel="stylesheet" href="/css/styles.css">
 
-            <div class="photo">
-              <img src="https://picsum.photos/100" alt="display picture">            
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row user-dp-section">
+            <div>
+                <div class="col">
+                    <img class="user-dp" src="/<%= userdata[0].photo %>" />
+                </div>
             </div>
-
-            <div class="info">
-              <div class="name"><%= child.child_name %></div>
-              <div class="status"><%= child.child_status %></div>
-              <div class="activity"><%= child.activity %></div>
-            </div>
-
-           <% }); %>    
-
         </div>
-      </main>
 
-    </section>
+        <div class="row child-section">
+            <div class="col">
 
-  
-  
+                <div class="user-name-display">
+                    <p class="user-name-text"><%= userdata[0].name %></p>
+                </div>
+                
+                <div class="user-status-display">
+                    <p class="user-status-text">Children Profiles:</p>
+                </div>
+
+                <!-- <div class="user-status-dropdown">
+                    <form method="POST">
+                        
+                        <select name="status">
+                            <option value="Available" name="status"> Available </option>
+                    
+                            <option value="Busy" name="status"> Busy </option>
+                    
+                            <option value="Do Not Disturb" name="status"> Do Not Disturb </option>
+                           
+                        </select>    
+                        
+                        <br>
+                        <button type="submit" class="btn"><i class="fa fa-exchange"></i></button>
+                    </form>
+                </div> -->
+
+                <% childdata.forEach((child)=> {%>
+                <div class="child-card">
+                    <img class="child-dp" src="/<%= child.child_photo %>" />
+                    <div class="child-info">
+                        <p class="child-name-text"><%= child.child_name %></p>
+                        <p class="child-activity-text">is currently <%= child.activity %>.</p>
+                    </div>                   
+
+                    <form action="/editchild/<%=child.id %>">
+                        <button type="submit" class="btn"><i class="fa fa-edit"></i></button>
+                    </form>
+
+                    <form action="/delchild/<%=child.id %>">
+                        <button type="submit" class="btn"><i class="fa fa-trash"></i></button>
+                    </form>
+
+                    <form action="/child/<%=child.id %>">
+                        <button type="submit" class="btn"><i class="fa fa-chevron-right"></i></button>
+                    </form>
+                </div>
+                <% }); %>
+
+                <div class="child-card">
+                    <form action="/addchild">
+                        <button type="submit" class="btn"><i class="fa fa-plus"></i>    Add Child</button>
+                    </form>
+                </div>              
+               
+
+            </div>
+        </div>
+
+        <div class="row menu">
+            <div>
+                <div class="col-6"></div>
+
+                <form action="/logout">
+                    <button type="submit" class="btn"><i class="fa fa-times"></i> Logout </button>                
+                </form>
+               
+                
+                
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    </div>
 
 
 
@@ -132,20 +116,6 @@
 
 
 
+</body>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  </body>
 </html>

@@ -1,0 +1,189 @@
+.container {
+  width: max(100vw);
+  height: max(100vh);
+  /* background: rgb(148, 187, 233); */
+  background: url(https://i.pinimg.com/originals/af/fb/60/affb60e0c4213745649b0d56e1820367.gif);
+  background-size: cover;
+  border: 2px solid rgb(0, 0, 0);
+
+  overflow-y: scroll;
+}
+
+/* USER DASHBOARD ================================================================= */
+
+.user-dp-section {
+  display: flex;
+  justify-content: center;
+}
+
+.user-dp {
+  width: 145px;
+  height: 145px;
+  object-fit: cover;
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 30vh;
+  position: relative;
+  top: 50px;
+  z-index: 2;
+}
+
+.child-section {
+  height: max(400px);
+  background-color: rgb(255, 255, 255, 0.8);
+  /* border-radius: 2.5vh; */
+  border: 2px solid rgb(0, 0, 0);
+  margin: 5px;
+  overflow-y: scroll;
+  z-index: 1;
+}
+
+.user-name-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8em;
+  margin-top: 7vh;
+  text-transform: capitalize;
+}
+
+/* .user-name-text {
+  
+} */
+
+.user-status-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  margin-top: -15px;
+  text-transform: capitalize;
+}
+
+/* .user-status-text {
+  
+} */
+
+.user-status-dropdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  margin-top: -15px;
+}
+
+.child-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: rgb(255, 255, 255);
+  /* border-radius: 7vh; */
+  border: 1px solid rgb(0, 0, 0);
+  margin-bottom: 2vh;
+}
+
+.child-dp {
+  width: 70px;
+  height: 70px;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 30vh;
+  margin: 1.5vh;
+}
+
+.child-info {
+  margin-top: -0.5vh;
+}
+
+.child-name-text {
+  margin: 0;
+  font-size: 1.2em;
+  text-transform: capitalize;
+}
+
+.child-activity-text {
+  margin: 0;
+  font-size: 0.7em;
+  text-transform: lowercase;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  margin-top: 6vh;
+  background-color: rgb(255, 255, 255, 0.8);
+  font-family: "Roboto", sans-serif;
+  font-weight: bolder;
+}
+
+.form-menu-items {
+  display: flex;
+  justify-content: center;
+}
+
+.form-alert {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  margin-top: -15px;
+}
+
+/* template ====================================================*/
+.user-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8em;
+  margin-top: 7vh;
+}
+
+.user-card2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  margin-top: -15px;
+}
+/* template ====================================================*/
+.form-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8em;
+  margin-top: 7vh;
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+}
+
+.form-input {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+}
+
+input[type="text"] {
+  width: 100%;
+  background-color: rgb(0, 0, 0, 0);
+  border: none;
+  border-bottom: 1px solid grey;
+}
+
+.button {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}

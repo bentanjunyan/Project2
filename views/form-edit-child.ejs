@@ -1,25 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Edit Child Profile</title>
+
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
-  
-     <form method="POST">
-      <label for="name">Name:</label><br />
-      <input type="text" id="name" name="name" /><br />
 
-      <label for="dob">Date of Birth:</label><br />
-      <input type="date" id="dob" name="dob" /><br />
+  <div class="container">
 
-      <label for="gender">Gender:</label><br />
-      <input type="text" id="gender" name="gender" /><br />
+    <div class="row user-dp-section">
+      <div>
+        <div class="col">
+          <img class="user-dp" src=https://cdn.dribbble.com/users/1914549/screenshots/5401794/media/9c4dd34a7bc125f4e5126e416c3a8320.gif />
+        </div>
+      </div>
+    </div>
 
-      <input type="submit" value="Submit" />
- </form>  
+    <div class="row child-section">
+      <div class="col">
 
+        <div class="form-title">
+          <p class="form-title-text">Edit Child Profile</p>
+        </div>
+
+        <div class="form-input">
+          <div>
+            <form method="POST" enctype="multipart/form-data">
+              <input type="text" id="name" name="name" pattern="[A-Za-z\s]{2,}" placeholder="Name" required /><br />
+              <br>
+              <input type="text" id="dob" name="dob" placeholder="Date of Birth (DD-MM-YYYY)"
+                pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}" required /><br />
+              <br>
+              <input type="text" id="gender" name="gender" maxlength="1" pattern="[M,F]{1}" placeholder="Gender (M/F)"
+                required /><br />
+              <br>
+              <label for="photo">Display Photo:</label>
+              <input type="file" name="photo" required />
+              <br><br>
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row menu">
+      <div class="col">
+        <form class="form-menu-items" action="/user">
+          <button type="submit" class="btn"><i class="fa fa-arrow-circle-left"></i> Back </button>
+        </form>
+      </div>
+    </div>
+    </div>
 </body>
+
 </html>

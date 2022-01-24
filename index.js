@@ -2,25 +2,25 @@ import express from 'express'
 import pg from 'pg'
 import session from 'express-session'
 import FileStore from 'session-file-store'
+import multer from 'multer'
 
 const app = express();
 const {Pool} = pg
 const createFileStore = FileStore(session);
+const multerUpload = multer({ dest: 'uploads/' });
 
 app.set('view engine', 'ejs'); //ejs
-app.use(express.static("public"));
-// app.use('*/css',express.static('public/css'));
+app.use(express.static('public')); //css
+app.use(express.static('uploads')); //multer
 app.use(express.urlencoded({ extended: false })); // request.body
-
 
 // SETUP PG ============================================================
 const pgConfig = {
-  user: 'BEN',
+  user: 'ben',
   host: 'localhost',
-  database: 'BEN',
+  database: 'project2',
   port: 5432
 }
-
 const pool = new Pool(pgConfig);
 
 // SETUP SESSION =======================================================
@@ -43,31 +43,23 @@ app.post('/login', async (req,res)=>{
   let results = await pool.query(`SELECT id, password FROM users WHERE username =$1`, values)
 
   if (results.rows.length === 0) {
-    res.send("Username does not exist.")
+    res.render('login-failed1')
 
   } else if (results.rows[0].password === req.body.password)  {
     req.session.username = req.body.username;
     req.session.userid = results.rows[0].id;    
-    res.redirect('/userloggingin')
+    res.redirect('/user')
 
   } else {
-    res.send('Login Failed.')
+    res.render('login-failed2')
   }
-})
-
-//USERLOGGINGIN ROUTE ====================================================
-app.get ('/userloggingin', (req,res)=>{
-  res.render('login2')
-})
-
-app.post ('/userloggingin', (req,res)=>{
-  res.redirect('/user')
 })
 
 //LOGOUT ROUTE ===========================================================
 app.get('/logout', (req,res)=>{
-  req.session.username = '';
-  req.session.userid = '';
+  // req.session.username = '';
+  // req.session.userid = '';
+  req.session.destroy();
   res.redirect('/login')
 })
 
@@ -76,33 +68,40 @@ app.get('/signup', (req,res)=>{
   res.render('signup')
 })
 
-app.post('/signup', async (req,res)=>{
+app.post('/signup', multerUpload.single('photo'), async (req,res)=>{
   console.log(req.body)
 
-  let values = [req.body.name, req.body.username, req.body.password, req.body.email]
-  await pool.query (`INSERT INTO users (name, username, password, email, status) VALUES ($1, $2, $3, $4, 'Available')`, values)
-  res.send("Account Successfully Created. Please Login.")  
+  let values = [req.body.name, req.body.username, req.body.password, req.body.email, req.file.filename]
+  await pool.query (`INSERT INTO users (name, username, password, email, status, photo) VALUES ($1, $2, $3, $4, 'Available', $5)`, values)
+  res.redirect('/login')  
 })
 
 // USER DASHBOARD ROUTE ====================================================
 app.get('/user', async (req,res)=>{
 
-  // if (req.session.userid === "") {
-  //   res.redirect("/login");
-  //   return;
-  // } 
+  if (! req.session.userid ) {
+    res.redirect('/login');
+    return;
+  } 
 
   let sessionUserId = [req.session.userid]; 
+
+  let userInfo = await pool.query(
+    'SELECT * FROM users WHERE id =$1', sessionUserId
+    )  
   
-  let results = await pool.query(
-    'SELECT u.name, u.username, u.email, u.status, c.id, c.name AS child_name, c.dob, c.gender, c.status AS child_status, c.activity FROM children AS c JOIN users AS u ON u.id = c.user_id WHERE u.id =$1', sessionUserId
+  let childInfo = await pool.query(
+    'SELECT u.name, u.username, u.email, u.status, u.photo, c.id, c.name AS child_name, c.dob, c.gender, c.status AS child_status, c.activity, c.photo AS child_photo FROM children AS c JOIN users AS u ON u.id = c.user_id WHERE u.id =$1', sessionUserId
     ) 
 
-  console.log(results.rows)
-
   res.render('dashboard-user', {
-    'userdata': results.rows    
+    'userdata': userInfo.rows,
+    'childdata': childInfo.rows
   })
+
+  console.log(userInfo.rows)
+  console.log(childInfo.rows)
+
 })
 
 app.post('/user', async (req,res)=>{     
@@ -113,6 +112,7 @@ app.post('/user', async (req,res)=>{
 
 // USER DASHBOARD: ADD CHILD ===============================================
 app.get('/addchild', (req,res)=>{
+
   if (! req.session.userid ) {
     res.redirect('/login');
     return;
@@ -120,19 +120,20 @@ app.get('/addchild', (req,res)=>{
  res.render('form-add-child')
 })
 
-app.post('/user/addchild', async(req,res)=>{
+app.post('/addchild', multerUpload.single('photo'), async(req,res)=>{
  
   let userId = req.session.userid;
 
-  let values = [req.body.name, req.body.dob, req.body.gender, userId]
+  let values = [req.body.name, req.body.dob, req.body.gender, userId, req.file.filename]
 
-  await pool.query(`INSERT INTO children (name, dob, gender, status, activity, user_id) VALUES ($1,$2,$3,'free','rest',$4)`, values)
+  await pool.query(`INSERT INTO children (name, dob, gender, status, activity, user_id, photo) VALUES ($1, $2, $3,'free','playing',$4, $5)`, values)
 
   res.redirect('/user') 
 })
 
 // USER DASHBOARD: EDIT CHILD ==========================
 app.get('/editChild/:id', (req,res)=>{
+
   if (! req.session.userid ) {
     res.redirect('/login');
     return;
@@ -140,15 +141,14 @@ app.get('/editChild/:id', (req,res)=>{
  res.render('form-edit-child')
 })
 
-app.post('/editChild/:id', async(req,res)=>{
+app.post('/editChild/:id', multerUpload.single('photo'), async(req,res)=>{
   console.log(req.body)
 
-  let childId = req.params.id
-  console.log(req.params.id)
+  let childId = req.params.id  
 
-  let values = [req.body.name, req.body.dob, req.body.gender, childId]
+  let values = [req.body.name, req.body.dob, req.body.gender, childId, req.file.filename]
 
-  await pool.query(' UPDATE children SET name = $1, dob = $2, gender = $3 WHERE id = $4', values)
+  await pool.query(' UPDATE children SET name = $1, dob = $2, gender = $3, photo = $5 WHERE id = $4', values)
 
   res.redirect('/user') 
 })
@@ -156,6 +156,11 @@ app.post('/editChild/:id', async(req,res)=>{
 // USER DASHBOARD: DEL CHILD =============================
 
 app.get('/delchild/:id', (req,res)=>{
+
+  if (req.session.userid === "") {
+    res.redirect("/login");
+    return;
+  } 
   res.render('form-del-child')
 })
 
@@ -172,18 +177,16 @@ app.get('/child/:id', async(req,res)=>{
   if (req.session.userid === "") {
     res.redirect("/login");
     return;
-  } 
-
+  }   
   let sessionUserId = [req.session.userid, req.params.id]; 
-  let childID = [req.params.id];
+  let childID = [req.params.id, req.session.date];
+  
 
   let userQueryResults = await pool.query(
-    'SELECT u.name, u.username, u.email, u.status, c.id, c.name AS child_name, c.dob, c.gender, c.status AS child_status, c.activity FROM children AS c JOIN users AS u ON u.id = c.user_id WHERE u.id =$1 AND c.id =$2', sessionUserId) 
-
-    
+    'SELECT u.name, u.username, u.email, u.status, c.id, c.name AS child_name, c.dob, c.gender, c.status AS child_status, c.activity, c.photo AS child_photo FROM children AS c JOIN users AS u ON u.id = c.user_id WHERE u.id =$1 AND c.id =$2', sessionUserId)     
 
   let eventQueryResults = await pool.query(
-    'SELECT e.id AS event_id, e.date, e.description, e.child_id, c.id FROM events AS e JOIN children AS c ON e.child_id = c.id WHERE c.id = $1',childID)   
+    'SELECT e.id AS event_id, e.date, e.description, e.child_id, e.title, e.image, e.time, c.id FROM events AS e JOIN children AS c ON e.child_id = c.id WHERE c.id = $1 AND e.date = $2',childID)   
 
     console.log(eventQueryResults.rows[0])
 
@@ -195,8 +198,11 @@ app.get('/child/:id', async(req,res)=>{
 
 app.post('/child/:id', async (req,res)=>{ 
   let childId = req.params.id   
-  let values = [req.body.status, childId]
-  await pool.query('UPDATE children SET status = $1 WHERE id= $2', values)  
+  let values = [req.body.activity, childId]
+  req.session.date = req.body.date;
+  console.log(req.session.date)
+  console.log(req.body.date)
+  await pool.query('UPDATE children SET activity = $1 WHERE id= $2', values)  
   
   res.redirect('/user')
 })
@@ -204,37 +210,43 @@ app.post('/child/:id', async (req,res)=>{
 // CHILD DASHBOARD: ADD EVENT  =============================
 
 app.get('/child/addevent/:id', (req,res)=>{
+  if (req.session.userid === "") {
+    res.redirect("/login");
+    return;
+  } 
  res.render('form-add-event')
 }) 
 
-app.post('/child/addevent/:id', async(req,res)=>{
+app.post('/child/addevent/:id', multerUpload.single('image'), async(req,res)=>{
   console.log(req.body)
   console.log(req.params)
 
-  let childID = req.params.id
-  let values = [req.body.date, req.body.description, childID]
+  let eventID = req.params.id
+  let values = [req.body.date, req.body.description, eventID, req.body.title, req.file.filename, req.body.time]
 
-  await pool.query('INSERT INTO events (date, description, child_id) VALUES ($1,$2,$3)', values)
+  await pool.query('INSERT INTO events (date, description, child_id, title, image, time) VALUES ($1,$2,$3,$4,$5,$6)', values)
 
  res.redirect('/user') 
 })
 
-
-
 // CHILD DASHBOARD: EDIT EVENT  =============================
 
 app.get('/child/editevent/:eventid', (req,res)=>{
+  if (req.session.userid === "") {
+    res.redirect("/login");
+    return;
+  } 
  res.render('form-edit-event')
 })
 
-app.post('/child/editevent/:eventid', async(req,res)=>{
+app.post('/child/editevent/:eventid', multerUpload.single('image'), async(req,res)=>{
   console.log(req.body)
   console.log(req.params)
 
   let eventID = req.params.eventid
-  let values = [req.body.date, req.body.description, eventID]
+  let values = [req.body.date, req.body.description, eventID, req.body.title, req.file.filename, req.body.time]
 
-  await pool.query('UPDATE events SET date= $1, description= $2 WHERE id= $3', values)
+  await pool.query('UPDATE events SET date= $1, description= $2, title= $4, image= $5, time= $6 WHERE id= $3', values)
 
  res.redirect('/user') 
 })
@@ -242,6 +254,10 @@ app.post('/child/editevent/:eventid', async(req,res)=>{
 // CHILD DASHBOARD: DEL EVENT  =============================
 
 app.get('/child/delevent/:eventid', (req,res)=>{
+  if (req.session.userid === "") {
+    res.redirect("/login");
+    return;
+  } 
  res.render('form-del-event')
 })
 
@@ -253,41 +269,3 @@ app.post('/child/delevent/:eventid', async (req,res)=>{
 
 // END =====================================================
 app.listen(3004);
-
-
-
-
-
-
-
-// function checkIfAuthenticated(req,res,next) {
-//   if (req.session.userid) {
-//     next()
-//   } else {
-//     res.redirect('/login');
-//   }
-// }
-
-// delete user
-// app.get('/delete-user/:id', async (req,res)=>{
-//   let results = await pool.query("SELECT * FROM users WHERE id = $1", [req.params.id]);
-
-//   res.render('confirm-delete',{
-//     user: results.rows[0]
-//   })
-// })
-
-// app.post('/delete-user/:id', async(req,res)=>{
-//   await pool.query("DELETE FROM users WHERE id = $1", [req.params.id]);
-//   res.send("User has been deleted");
-// })
-
-
-// APP FEATURES
-
-// login - logout
-// c r u d - child
-// c r u d - checklist
-
-// status parents
-// status child

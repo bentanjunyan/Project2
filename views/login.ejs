@@ -1,22 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Sign-In</title>
+
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
 
-<!-- may i know what the label, id and name here connects to ?-->
+  <div class="container">
 
-   <form method="POST">
-      <label for="username">Useranme:</label><br />
-      <input type="text" id="username" name="username" /><br />
-      <label for="password">Password:</label><br />
-      <input type="password" id="password" name="password" /><br />
-      <input type="submit" value="Submit" />
-    </form>
-  
+    <div class="row user-dp-section">
+      <div>
+        <div class="col">
+          <img class="user-dp" src=https://64.media.tumblr.com/44e89309ea155b3be1213e64cc872f2a/tumblr_n0wqfhEW9K1sghdp8o1_400.gif />
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row child-section">
+      <div class="col">
+
+        <div class="form-title">
+          <p class="form-title-text">Sign-In</p>
+        </div>
+
+        <br>
+
+        <div class="form-input">
+          <div>
+            <form method="POST">
+              <input type="text" id="username" name="username" placeholder="Username" required /><br />
+              <br>             
+              <input type="password" id="password" name="password" placeholder="Password" required /><br />
+              <br>              
+              <input type="submit" value="Sign-In" />
+            </form>
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row menu">      
+      <div class="col">
+        <form class="form-menu-items" action="/signup">
+          <button type="submit" class="btn"><i class="fa fa-pencil"></i> Sign-Up </button>
+        </form>
+      </div>
+    </div>
 </body>
+
 </html>
